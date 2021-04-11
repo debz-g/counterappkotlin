@@ -1,0 +1,267 @@
+- onCreate function is basically the main function of android
+- android permissions are stored in manifest file. It also contains the icon,theme,etc
+- res folder contains all the resource app needs.
+    - drawable folder contains all the images
+    - layout contains all the elements on the screen
+    - mipmap is used to put the app icon inside
+- values has 3 folder: colours,string and style
+    - colours.xml contain all the colours used in the app
+    - strings.xml defines the global strings
+    - styles.xml defines app theme and primary,accent colours from colours.xml
+- gradle is basically the build system of android:
+  it basically takes all the components and makes them into a executable application
+  - build.gradle(project): contains general build configuration of the app
+  - build.gradle(app): - contains app level info. Can change Sdk version
+                       - dependencies: contains all the 3rd-party libraries
+
+   Everything we change in gradle , we need to sync that with the gradle by using sync now.
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+1. ACTIVITIES AND LIFE CYCLES
+
+a. Activity: it is a class in which we define how a specific screen. Multiple activities act like a
+             stack.
+
+b. LifeCycle: Check written notes.
+
+package com.debz.tutorials
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+    }
+
+    override fun onPause() {  //the following statement will be executed when onPause() is called.
+        super.onPause()
+        println("onPause initiated")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        println("onRestart initiated")
+    }
+}
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+2. LAYOUTS AND LINEAR LAYOUT
+
+- Every xml has a root layout
+- Linear layout must have orientation specified
+
+XML file of a simple nested Linear Layout format
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="First Name"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Last Name"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="DOB"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:hint="Sex"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:hint="Enter"/>
+    </LinearLayout>
+</LinearLayout>
+
+
+DEPRECATED PLUGIN IN KOTLIN:
+
+kotlin-android-extension is DEPRECATED
+view Binding is the new thing.
+
+
+USES OF BUTTONS:
+
+MainActivity
+
+package com.debz.itachixx
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.util.Log
+import com.debz.itachixx.databinding.ActivityMainBinding
+import javax.net.ssl.SSLSessionBindingEvent
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBindingvity
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.btnApply.setOnClickListener(){
+            val firstname= binding.etFirstName.text.toString()
+            val lastname= binding.etLastName.text.toString()
+            val dateofbirth=binding.etDOB.text.toString()
+            val country=binding.etCountry.text.toString()
+            Log.d("MainActivity","$firstname $lastname born on $dateofbirth from $country just applied to the formula")
+
+
+        }
+
+
+    }
+}
+
+
+
+activity_main.xml
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+
+    <EditText
+        android:id="@+id/etFirstName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+
+        android:hint="First Name"
+        app:layout_constraintEnd_toStartOf="@+id/etLastName"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etLastName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+
+        android:hint="Last Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/etFirstName"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etDOB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+
+        android:hint="Date Of Birth"
+        app:layout_constraintTop_toBottomOf="@+id/etFirstName"
+        tools:layout_editor_absoluteX="170dp" />
+
+    <EditText
+        android:id="@+id/etCountry"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+
+        android:hint="Country"
+        app:layout_constraintEnd_toStartOf="@+id/btnApply"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etDOB" />
+
+    <Button
+        android:id="@+id/btnApply"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Apply"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/etCountry"
+        app:layout_constraintTop_toBottomOf="@+id/etDOB" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+---------------------------------------------------------------------------------------------
+
+
+TEXTVIEWS AND SOME STUFF ASSOCIATED WITH IT
+
+
+ <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"  // IF LINE DOESNT FIT IT PUTS 3 DOTS
+        android:lines="2"        // SPECIFIES THE NUMBER OF LINES
+        android:text="Lets Count Toegether"
+        android:textAlignment="center"
+        android:textColor="@color/red"
+        android:textSize="20sp"
+        android:textStyle="italic|bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
